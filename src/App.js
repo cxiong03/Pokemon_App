@@ -1,7 +1,8 @@
 // useState enables us to store state in our function component
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import PokemonList from './PokemonList';
 import axios from 'axios';
+import Pagination from './Pagination';
 
 function App() {
   // pokemon will be our actual data while setPokemon will be the way which allows
@@ -33,12 +34,27 @@ function App() {
   }, [currentPageUrl]) // we leave the array empty becasue we don't want our effect to rerender itself so the effect runs one single time
                       // now our code is saying evertime currentPageUrl changes rerun the code inside of it
                       // and if it doesn't change don't bother rerunning the code
+
+  function goToNextPage() {
+    setCurrentPageUrl(nextPageUrl)
+  }
+  function goToPrevPage() {
+    setCurrentPageUrl(prevPageUrl)
+  }
+  
   if (loading) return "Loading..."
 
   return (
-    // we want to render PokemonList and pass in the props which is pokemon & it neeeds a list of 
-    // all the the pokemon to render so now we are passing our pokemon down to our PokemonList
+    <Fragment>
+    {/* we want to render PokemonList and pass in the props which is pokemon & it neeeds a list of 
+    all the the pokemon to render so now we are passing our pokemon down to our PokemonList */}
     <PokemonList pokemon={pokemon} />
+    <Pagination 
+    // if we have a next page then pass that function otherwise false
+      goToNextPage={nextPageUrl ? goToNextPage : null}
+      goToPrevPage={prevPageUrl ? goToPrevPage : null}
+    />
+    </Fragment>
   );
 }
 
